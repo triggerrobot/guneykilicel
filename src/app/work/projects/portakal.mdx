@@ -1,0 +1,61 @@
+---
+title: "Portakal: A Robust PERN Stack Food Ordering Platform"
+publishedAt: "2024-06-03"
+summary: "Development of a secure and dynamic food ordering platform built with the PERN stack, featuring JWT authentication, advanced PostgreSQL operations, and a responsive TailwindCSS UI."
+images:
+  - "/images/projects/project-01/portakal-01.webp"
+  - "/images/projects/project-01/portakal-02.webp"
+  - "/images/projects/project-01/portakal-03.webp"
+team:
+  - name: "Güney Kılıçel"
+    role: "Full-Stack Developer"
+    avatar: "/images/avatar.jpg"
+    linkedIn: "https://www.linkedin.com/in/g%C3%BCney-k%C4%B1l%C4%B1%C3%A7el-5920b61ba/"
+---
+
+## Overview
+
+Portakal is a full-stack food ordering application built with the PERN stack (PostgreSQL, Express, React, Node.js). It provides users with a secure platform to register, log in, and place orders at various restaurants. The application uniquely combines robust backend functionalities with a modern, responsive UI developed using TailwindCSS.
+
+## Key Features
+
+- **User Authentication:**  
+  Implements secure registration and login using JSON Web Tokens (JWT) alongside Bcrypt for password encryption.
+- **Data Security:**  
+  Protects sensitive information by encrypting user passwords before storage in PostgreSQL.
+- **Automated Database Updates:**  
+  Leverages PostgreSQL triggers to automatically update restaurant order and comment counts with every order or review.
+- **Advanced Database Operations:**  
+  Integrates custom functions for restaurant search and discount calculations, and uses stored procedures to list restaurants based on the user's neighborhood.
+- **Responsive UI Design:**  
+  Utilizes TailwindCSS to create a clean, modern, and responsive interface that adapts seamlessly across devices.
+
+## Technologies Used
+
+- **PostgreSQL:**  
+  For data storage, with advanced operations like triggers, functions, and stored procedures.
+- **Express & Node.js:**  
+  To build the backend RESTful API and manage server-side logic.
+- **React:**  
+  For developing a dynamic and responsive front-end interface.
+- **JSON Web Token (JWT):**  
+  For secure user authentication and session management.
+- **Bcrypt:**  
+  To encrypt sensitive data before storage.
+- **TailwindCSS:**  
+  For crafting a modern, responsive user interface.
+
+## Challenges and Learnings
+
+- **Security Integration:**  
+  Combining JWT-based authentication with Bcrypt encryption required a deep understanding of security best practices.
+- **Complex Database Operations:**  
+  Developing PostgreSQL triggers, custom functions, and stored procedures posed challenges in maintaining data consistency during concurrent modifications.
+- **Location-Based Functionality:**  
+  Creating stored procedures to filter restaurants by neighborhood involved careful SQL design and optimization.
+- **UI and Backend Synchronization:**  
+  Integrating a modern UI with sophisticated backend operations highlighted the importance of a clean and well-organized code architecture.
+
+## Outcome
+
+Portakal successfully delivers a seamless food ordering experience with robust security and dynamic data management. The project demonstrates strong full-stack development proficiency, effectively addressing complex technical challenges to create a production-ready application that enhances restaurant management and user engagement.

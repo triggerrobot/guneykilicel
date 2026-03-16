@@ -1,0 +1,214 @@
+---
+title: "Micro Frontend Architecture with Next.js Multi-Zones: A Technical Overview"
+publishedAt: "2025-01-06"
+image: "/images/projects/project-01/multi-zone-micro-frontend-architecture.webp"
+summary: "Next.js Multi-Zones kullanarak mikro frontend mimarisinin gücünü keşfedin ve ölçeklenebilir, sürdürülebilir web uygulamaları nasıl oluşturulur öğrenin."
+tag: "Technology"
+---
+
+![Multi Zone Micro Frontend Architecture](/images/projects/project-01/multi-zone-micro-frontend-architecture.webp)
+
+Micro frontend architecture is an approach to breaking down large and complex web applications into smaller, independent pieces. In this article, we'll examine from a technical perspective how to create an effective micro frontend architecture using Next.js's Multi-Zones feature.
+
+## Project Structure
+
+Our project consists of two separate Next.js applications: the main application and the blog application. Here's the file structure:
+
+```plaintext
+micro-frontend-demo/
+├── main-app/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── layout.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── globals.css
+│   │   └── middleware.ts
+│   ├── next.config.js
+│   └── package.json
+└── blog-app/
+    ├── src/
+    │   ├── app/
+    │   │   ├── layout.tsx
+    │   │   ├── page.tsx
+    |   |   └── globals.css
+    │   └── middleware.ts
+    ├── next.config.js
+    └── package.json
+```
+
+## Main Application (main-app)
+
+The main application is the core of our micro frontend architecture. This application presents the interface that users will first encounter and manages redirections to the blog application.
+
+## next.config.js
+
+<CodeBlock className="my-24"
+    compact
+    codeInstances={[
+        {
+            code: '/** @type {import("next").NextConfig} */\nconst nextConfig = {\n    async rewrites() {\n        return [\n            {\n                source: "/blog",\n                destination: `${process.env.BLOG_URL}/blog`,\n            },\n            {\n                source: "/blog/:path*",\n                destination: `${process.env.BLOG_URL}/blog/:path*`,\n            },\n        ];\n    },\n};\n\nmodule.exports = nextConfig',
+            label: 'Next.js',
+            language: 'tsx'
+        },
+    ]}
+    copyButton
+/>
+
+
+This configuration redirects all requests starting with `/blog` to the blog application. The address of the blog application is dynamically determined using the `BLOG_URL` environment variable.
+
+## src/app/page.tsx
+
+Our main page component has a functional and performance-focused structure:
+
+<CodeBlock className="my-24"
+    compact
+    codeInstances={[
+        {
+            code: 'import Link from "next/link"\nimport { Button } from "@/components/ui/button"\n\nexport default function Home() {\n    return (\n        <div className="container mx-auto px-4 py-8">\n            <h1 className="text-3xl font-bold mb-6">Main Application</h1>\n            <p className="mb-4">This is the main application of our micro frontend architecture.</p>\n            <Link href="/blog" passHref>\n                <Button>Go to Blog</Button>\n            </Link>\n        </div>\n    )\n}',
+            label: 'Next.js',
+            language: 'tsx'
+        },
+    ]}
+    copyButton
+/>
+
+This component has a simple and fast-loading structure. It optimizes initial loading performance by leveraging server-side rendering.
+
+## src/middleware.ts
+
+The middleware file is used to process incoming requests and add necessary CORS headers:
+
+<CodeBlock className="my-24"
+    compact
+    codeInstances={[
+        {
+            code: 'import { NextResponse } from "next/server"\nimport type { NextRequest } from "next/server"\n\nexport function middleware(request: NextRequest) {\n    const response = NextResponse.next()\n\n    response.headers.set("Access-Control-Allow-Origin", process.env.BLOG_URL || "")\n    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")\n    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization")\n\n    return response\n}\n\nexport const config = {\n    matcher: "/api/:path*",\n}',
+            label: 'Next.js',
+            language: 'tsx'
+        },
+    ]}
+    copyButton
+/>
+
+This middleware adds CORS headers to requests coming to API routes. The allowed origin is dynamically set using the `BLOG_URL` environment variable.
+
+## Blog Application (blog-app)
+
+The blog application is a separate Next.js application that operates independently from the main application.
+
+## next.config.js
+
+<CodeBlock className="my-24"
+    compact
+    codeInstances={[
+        {
+            code: '/** @type {import("next").NextConfig} */\nconst nextConfig = {\n    basePath: "/blog",\n    assetPrefix: "/blog",\n}\n\nmodule.exports = nextConfig',
+            label: 'Next.js',
+            language: 'tsx'
+        },
+    ]}
+    copyButton
+/>
+
+This configuration ensures that all routes and static files of the blog application are served with the `/blog` prefix.
+
+## src/app/page.tsx
+
+The blog home page:
+
+<CodeBlock className="my-24"
+    compact
+    codeInstances={[
+        {
+            code: 'import Link from "next/link"\n\nexport default function BlogHome() {\n    return (\n        <div className="container mx-auto px-4 py-8">\n            <h1 className="text-3xl font-bold mb-6">Blog</h1>\n            <ul className="space-y-4">\n                {/* Blog post list will be here */}\n            </ul>\n            <Link href="/" className="text-blue-500 hover:underline">\n                Return to Main Site\n            </Link>\n        </div>\n    )\n}',
+            label: 'Next.js',
+            language: 'tsx'
+        },
+    ]}
+    copyButton
+/>
+
+
+## Environment Variables and Deployment Strategy
+
+Environment variables and deployment strategy are critical for the successful implementation of the micro frontend architecture.
+
+## Environment Variables
+
+We should create separate `.env` files for the main application and blog application:
+
+**main-app/.env.local**
+
+<CodeBlock className="my-24"
+    compact
+    codeInstances={[
+        {
+            code: 'BLOG_URL=http://localhost:3001',
+            label: 'Next.js',
+            language: 'tsx'
+        },
+    ]}
+    copyButton
+/>
+
+**blog-app/.env.local**
+
+<CodeBlock className="my-24"
+    compact
+    codeInstances={[
+        {
+            code: 'NEXT_PUBLIC_MAIN_APP_URL=http://localhost:3000',
+            label: 'Next.js',
+            language: 'tsx'
+        },
+    ]}
+    copyButton
+/>
+
+In the production environment, these values should be replaced with real URLs.
+
+## Deployment Strategy
+
+1. **Independent Deployment**: Each application should be deployed as a separate Vercel project.
+2. **Environment Variables Configuration**: Appropriate environment variables should be set for each project in Vercel.
+3. **Domain Configuration**:
+
+1. Main application: `www.yoursite.com`
+2. Blog application: `blog.yoursite.com` or `www.yoursite.com/blog`
+
+
+
+4. **Continuous Integration/Continuous Deployment (CI/CD)**:
+
+1. Create separate CI/CD pipelines for each application.
+2. Pushes to the main branch should be automatically deployed to production.
+
+
+
+5. **Versioning**: Manage the version of each application separately using semantic versioning.
+6. **Canary Releases**: Use canary releases to introduce new features or major changes to a small group of users first.
+7. **Rollback Strategy**: Create a quick rollback mechanism for each deployment.
+
+
+## Technical Advantages of Micro Frontend Architecture
+
+1. **Independent Scaling**: Each application can be scaled separately according to its own needs.
+2. **Technology Renewal**: Parts of the applications can be migrated to new technologies while others continue to work with existing technologies.
+3. **Error Isolation**: An error in one application does not affect other applications.
+4. **Load Balancing**: Different applications can be hosted on different servers to achieve load balance.
+
+
+## Conclusion
+
+This micro frontend architecture we've created using Next.js Multi-Zones makes large-scale web applications more manageable and scalable. This approach accelerates the development process, facilitates maintenance, and allows us to scale different parts of the application independently.
+
+The technical points to pay attention to for successful implementation of this architecture are:
+
+1. Correct route management and CORS configuration
+2. Effective use of environment variables
+3. Independent deployment and scaling strategies
+4. Performance optimization and SEO compatibility
+
+
+When properly implemented, micro frontend architecture can significantly improve the development and maintenance processes of modern web applications, increase team productivity, and allow us to create more flexible, scalable systems.
